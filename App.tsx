@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { SafeAreaView, View, ActivityIndicator, Text, StyleSheet } from 'react-native';
+import { LAT, LON, WEATHER_API_KEY } from '@env';
 
 function App(): React.JSX.Element {
 
@@ -16,17 +17,18 @@ function App(): React.JSX.Element {
         setIsLoading(true);
         setError(null);
 
-        // Simulate API call with setTimeout
-        await new Promise(resolve => setTimeout(resolve, 500));
+        const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${LAT}&lon=${LON}&appid=${WEATHER_API_KEY}`
+        );
 
-        // Replace with your actual API call
-        // const response = await fetch('your-api-endpoint');
-        // const data = await response.json();
-        // setHumidity(data.humidity);
+        console.log(response)
 
-        setHumidity(75);
+        if (!response.ok) {
+          throw new Error('Failed to fetch weather data');
+        }
 
-        // throw new Error('An unknown error occurred');
+        const data = await response.json();
+        setHumidity(data.main.humidity);
       } catch (error: any) {
         setError(error.message);
         console.error('Error:', error);
