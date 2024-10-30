@@ -21,8 +21,6 @@ function App(): React.JSX.Element {
           `https://api.openweathermap.org/data/2.5/weather?lat=${LAT}&lon=${LON}&appid=${WEATHER_API_KEY}`
         );
 
-        console.log(response)
-
         if (!response.ok) {
           throw new Error('Failed to fetch weather data');
         }
@@ -31,7 +29,6 @@ function App(): React.JSX.Element {
         setHumidity(data.main.humidity);
       } catch (error: any) {
         setError(error.message);
-        console.error('Error:', error);
       } finally {
         setIsLoading(false);
       }
